@@ -229,7 +229,7 @@ FONT = {
           "00000"],
 }
 
-
+EATER = ["0011","0101","0100","1100"]
 
 LWSS_CELLS = [
     
@@ -271,26 +271,50 @@ def build_ship_positions(text):
 
     return positions
 
+EAT = [
+      (2,0), (3,0),
+      (1,1), (3,1),
+      (1,2),
+      (0,3),(1,3)
+]
+def place_eat():
+     
+      eatpos = []      
+
+      x_cursor = -((len(TEXT)*5 + ROW_SPACING)*5*5)+4
+      y_cursor = 4
+      for i in range(7):
+            ey = y_cursor + i * ROW_SPACING
+            eatpos.append((x_cursor, ey))
+      
+      for pos in eatpos:
+           for dx, dy in EAT:
+                g.setcell(pos[0] + dx, pos[1] + dy, 1)
+           
+     
+
 # ── main ───────────────────────────────────────────────────────────────────────
 def main():
-    g.new("HELLO Ticker")
-    g.setrule("B3/S23")
+      g.new("HELLO Ticker")
+      g.setrule("B3/S23")
 
-    g.show("Building HELLO ticker pattern ...")
+      g.show("Building HELLO ticker pattern ...")
 
-    positions = build_ship_positions(TEXT)
+      positions = build_ship_positions(TEXT)
 
-    for (gx, gy) in positions:
-        place_lwss(gx, gy)
+      for (gx, gy) in positions:
+            place_lwss(gx, gy)
 
-    g.fit()
-    g.update()
+      eaterPos = place_eat()
+            
+      g.fit()
+      g.update()
 
-    total_ships = len(positions)
-    g.show(
-        "Done! Placed %d LWSSs spelling '%s'.  "
-        "Press Space or Run to watch them scroll left."
-        % (total_ships, TEXT)
-    )
+      total_ships = len(positions)
+      g.show(
+            "Done! Placed %d LWSSs spelling '%s'.  "
+            "Press Space or Run to watch them scroll left."
+            % (total_ships, TEXT)
+      )
 
 main()
