@@ -238,23 +238,14 @@ LWSS_CELLS = [
     (0, 2), (5, 2),           # row 2
     (0, 3), (1, 3), (2, 3), (3, 3), (4, 3),  # row 3
 ]
-LWSS_CELLS_FLIP = [
-    
-    (0, 0), (1, 0), (2, 0), (3, 0), (4, 0),
-    (0, 1), (5, 1), 
-    (0, 2), 
-    (1, 3), (4, 3),        
-]
+
 
 def place_lwss(lx, ly):
     """Place a westward LWSS with bounding-box top-left at (lx, ly)."""
     for dx, dy in LWSS_CELLS:
         g.setcell(lx + dx, ly + dy, 1)
 
-def place_lwss_flip(lx, ly):
-    """Place a westward LWSS with bounding-box top-left at (lx, ly)."""
-    for dx, dy in LWSS_CELLS_FLIP:
-        g.setcell(lx + dx, ly + dy, 1)
+
 
 def spawn_letter(ch):
 
@@ -264,10 +255,8 @@ def spawn_letter(ch):
         for row in range(7):
             if glyph[row][5-1-col] == '1':
                 gy = ORIGIN_Y + row * ROW_SPACING
-                if col % 2 == 0:
-                  place_lwss(gx, gy)
-                else:
-                    place_lwss_flip(gx, gy)
+                place_lwss(gx, gy)
+
 
 
 
