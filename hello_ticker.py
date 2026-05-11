@@ -1,14 +1,14 @@
 
-
 import golly as g
+import time as t
 
+TEXT            = " HELLO"   # word to loop 
+ROW_SPACING     = 20        # vertical cells between pixel rows 
+COL_SPACING     = 20        # horizontal cells between pixel columns of a letter
 
-TEXT         = "TUN A TSUB ANNIF"      # word to display has to be backwards to work
-ROW_SPACING  = 20           # vertical cells between bitmap rows
-COL_SPACING  = 20           # horizontal cells between bitmap columns
-CHAR_GAP     = 40           # extra horizontal gap between characters
-ORIGIN_X     = 0            # where to start placing ships (right edge)
-ORIGIN_Y     = 0            # top of the bitmap
+CHAR_GAP_CELLS  = 40        # extra cells of clearance between letters
+SPAWN_X         = 0         # x grid column where new letters are injected
+ORIGIN_Y        = 0         # y grid row of the top pixel row
 
 
 FONT = {
@@ -232,65 +232,78 @@ FONT = {
 
 
 LWSS_CELLS = [
-    
+   
     (1, 0), (4, 0),          # row 0
     (0, 1),                   # row 1
     (0, 2), (5, 2),           # row 2
     (0, 3), (1, 3), (2, 3), (3, 3), (4, 3),  # row 3
 ]
-
+LWSS_CELLS_FLIP = [
+    
+    (0, 0), (1, 0), (2, 0), (3, 0), (4, 0),
+    (0, 1), (5, 1), 
+    (0, 2), 
+    (1, 3), (4, 3),        
+]
 
 def place_lwss(lx, ly):
     """Place a westward LWSS with bounding-box top-left at (lx, ly)."""
     for dx, dy in LWSS_CELLS:
         g.setcell(lx + dx, ly + dy, 1)
 
+def place_lwss_flip(lx, ly):
+    """Place a westward LWSS with bounding-box top-left at (lx, ly)."""
+    for dx, dy in LWSS_CELLS_FLIP:
+        g.setcell(lx + dx, ly + dy, 1)
 
-def build_ship_positions(text):
+def spawn_letter(ch):
 
-    positions = []
+    glyph = FONT.get(ch.upper(), FONT[' '])
+    for col in range(5):
+        gx = SPAWN_X - col * COL_SPACING
+        for row in range(7):
+            if glyph[row][5-1-col] == '1':
+                gy = ORIGIN_Y + row * ROW_SPACING
+                if col % 2 == 0:
+                  place_lwss(gx, gy)
+                else:
+                    place_lwss_flip(gx, gy)
 
-    x_cursor = ORIGIN_X
 
-    for char_index, ch in enumerate(text.upper()):
-        glyph = FONT.get(ch, FONT[' '])
-        num_cols = len(glyph[0])   # always 5
 
-        # Columns: col 0 is leftmost in the glyph.
-        # To display left-to-right, col 0 must arrive first ⟹ starts rightmost.
-        # So col 0 gets x_cursor, col 1 gets x_cursor - COL_SPACING, etc.
-        for col in range(num_cols):
-            gx = x_cursor - col * COL_SPACING
-            for row in range(7):
-                if glyph[row][num_cols-col-1] == '1':
-                    gy = ORIGIN_Y + row * ROW_SPACING
-                    positions.append((gx, gy))
-
-        # After all columns of this character, advance cursor for next char
-        x_cursor -= (num_cols * COL_SPACING) + CHAR_GAP
-
-    return positions
-
-# ── main ───────────────────────────────────────────────────────────────────────
 def main():
-    g.new("HELLO Ticker")
+    g.new("HELLO Ticker (looping)")
     g.setrule("B3/S23")
+    g.autoupdate(True)      
 
-    g.show("Building HELLO ticker pattern ...")
 
-    positions = build_ship_positions(TEXT)
+    LETTER_WIDTH_CELLS = 4 * COL_SPACING + CHAR_GAP_CELLS
+    GENS_PER_LETTER    = LETTER_WIDTH_CELLS * 2   # cells * 2 gens/cell
 
-    for (gx, gy) in positions:
-        place_lwss(gx, gy)
+    STEP = 4  
 
-    g.fit()
-    g.update()
+    letter_index = 0
 
-    total_ships = len(positions)
-    g.show(
-        "Done! Placed %d LWSSs spelling '%s'.  "
-        "Press Space or Run to watch them scroll left."
-        % (total_ships, TEXT)
-    )
+    g.show("Spawning '%s' on loop -- close the script window to stop." % TEXT)
+
+    while True:
+        gen = g.getgen()
+        if int(gen) % 240 == 0:
+            ch = TEXT[letter_index % len(TEXT)]
+            spawn_letter(ch)
+            g.fit()
+
+            
+            gens_run = 0
+            while gens_run < GENS_PER_LETTER:
+                  g.run(STEP)
+                  gens_run += STEP
+                  g.show(
+                  "Letter %d/%d ('%s') -- generation %d -- running..."
+                  % (letter_index % len(TEXT) + 1, len(TEXT), ch, gens_run)
+                  )
+
+            letter_index += 1
+       
 
 main()
