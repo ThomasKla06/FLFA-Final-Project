@@ -3,7 +3,7 @@
 import golly as g
 
 
-TEXT         = "TUN A TSUB ANNIF"      # word to display has to be backwards to work
+TEXT         = " OLLEH OLLEH OLLEH"      # word to display has to be backwards to work
 ROW_SPACING  = 20           # vertical cells between bitmap rows
 COL_SPACING  = 20           # horizontal cells between bitmap columns
 CHAR_GAP     = 40           # extra horizontal gap between characters
@@ -281,7 +281,7 @@ def place_eat():
      
       eatpos = []      
 
-      x_cursor = -((len(TEXT)*5 + ROW_SPACING)*5*5)+4
+      x_cursor = -2600
       y_cursor = 4
       for i in range(7):
             ey = y_cursor + i * ROW_SPACING
