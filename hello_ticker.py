@@ -2,7 +2,7 @@
 import golly as g
 import time as t
 
-TEXT            = " HELLO"   # word to loop 
+TEXT            = "finna bust a nut "   # word to loop 
 ROW_SPACING     = 20        # vertical cells between pixel rows 
 COL_SPACING     = 20        # horizontal cells between pixel columns of a letter
 
@@ -264,7 +264,9 @@ def main():
     g.new("HELLO Ticker (looping)")
     g.setrule("B3/S23")
     g.autoupdate(True)      
-
+    tesxt_to_spawn = ""
+    if TEXT[0] != ' ':
+        text_to_spawn = ' ' + TEXT
 
     LETTER_WIDTH_CELLS = 4 * COL_SPACING + CHAR_GAP_CELLS
     GENS_PER_LETTER    = LETTER_WIDTH_CELLS * 2   # cells * 2 gens/cell
@@ -273,12 +275,13 @@ def main():
 
     letter_index = 0
 
-    g.show("Spawning '%s' on loop -- close the script window to stop." % TEXT)
+    g.show("Spawning '%s' on loop -- close the script window to stop." % text_to_spawn)
 
     while True:
         gen = g.getgen()
-        if int(gen) % 240 == 0:
-            ch = TEXT[letter_index % len(TEXT)]
+        if int(gen) % 240 == 0 :
+            
+            ch = text_to_spawn[letter_index % len(text_to_spawn)]
             spawn_letter(ch)
             g.fit()
 
@@ -289,10 +292,12 @@ def main():
                   gens_run += STEP
                   g.show(
                   "Letter %d/%d ('%s') -- generation %d -- running..."
-                  % (letter_index % len(TEXT) + 1, len(TEXT), ch, gens_run)
+                  % (letter_index % len(text_to_spawn) + 1, len(text_to_spawn), ch, gens_run)
                   )
 
             letter_index += 1
+      
+            
        
 
 main()
