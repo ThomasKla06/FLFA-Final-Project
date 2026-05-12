@@ -251,7 +251,7 @@ def spawn_letter(ch):
 
     glyph = FONT.get(ch.upper(), FONT[' '])
     for col in range(5):
-        gx = SPAWN_X - col * COL_SPACING
+        gx = ORIGIN_X - col * COL_SPACING
         for row in range(7):
             if glyph[row][5-1-col] == '1':
                 gy = ORIGIN_Y + row * ROW_SPACING
@@ -293,7 +293,7 @@ def main():
       if TEXT[0] != ' ':
             text_to_spawn = ' ' + TEXT
 
-      LETTER_WIDTH_CELLS = 4 * COL_SPACING + CHAR_GAP_CELLS
+      LETTER_WIDTH_CELLS = 4 * COL_SPACING + CHAR_GAP
       GENS_PER_LETTER    = LETTER_WIDTH_CELLS * 2   # cells * 2 gens/cell
 
       place_eat()
