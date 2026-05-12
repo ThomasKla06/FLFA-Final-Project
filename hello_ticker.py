@@ -1,9 +1,10 @@
 
 
 import golly as g
+import math as m
 
 
-TEXT         = " OLLEH OLLEH OLLEH"      # word to display has to be backwards to work
+TEXT         = "HELLOHELLO HELLO OLLE"      # word to display has to be backwards to work
 ROW_SPACING  = 20           # vertical cells between bitmap rows
 COL_SPACING  = 20           # horizontal cells between bitmap columns
 CHAR_GAP     = 40           # extra horizontal gap between characters
@@ -278,10 +279,10 @@ EAT = [
       (0,3),(1,3)
 ]
 def place_eat():
-     
+      spacing = m.floor(len(TEXT)/7)
       eatpos = []      
 
-      x_cursor = -2600
+      x_cursor = -1848 - (752*spacing)
       y_cursor = 4
       for i in range(7):
             ey = y_cursor + i * ROW_SPACING
