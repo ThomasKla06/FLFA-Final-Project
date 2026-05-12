@@ -301,6 +301,7 @@ def main():
 
       g.show("Building HELLO ticker pattern ...")
 
+      TEXT = g.getstring("Enter Text to Create Banner: ", "Hello World")
       positions = build_ship_positions(TEXT)
 
       for (gx, gy) in positions:
