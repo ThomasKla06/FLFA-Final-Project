@@ -1,14 +1,14 @@
 
 import golly as g
+import math as m
 import time as t
 
-TEXT            = "finna bust a nut "   # word to loop 
-ROW_SPACING     = 20        # vertical cells between pixel rows 
-COL_SPACING     = 20        # horizontal cells between pixel columns of a letter
-
-CHAR_GAP_CELLS  = 40        # extra cells of clearance between letters
-SPAWN_X         = 0         # x grid column where new letters are injected
-ORIGIN_Y        = 0         # y grid row of the top pixel row
+TEXT         = "HELLOHELLO HELLO OLLE"      # word to display has to be backwards to work
+ROW_SPACING  = 20           # vertical cells between bitmap rows
+COL_SPACING  = 20           # horizontal cells between bitmap columns
+CHAR_GAP     = 40           # extra horizontal gap between characters
+ORIGIN_X     = 0            # where to start placing ships (right edge)
+ORIGIN_Y     = 0            # top of the bitmap
 
 
 FONT = {
@@ -229,7 +229,7 @@ FONT = {
           "00000"],
 }
 
-
+EATER = ["0011","0101","0100","1100"]
 
 LWSS_CELLS = [
    
@@ -260,6 +260,29 @@ def spawn_letter(ch):
 
 
 
+EAT = [
+      (2,0), (3,0),
+      (1,1), (3,1),
+      (1,2),
+      (0,3),(1,3)
+]
+def place_eat():
+      spacing = m.floor(len(TEXT)/7)
+      eatpos = []      
+
+      x_cursor = -1848 - (752*spacing)
+      y_cursor = 4
+      for i in range(7):
+            ey = y_cursor + i * ROW_SPACING
+            eatpos.append((x_cursor, ey))
+      
+      for pos in eatpos:
+           for dx, dy in EAT:
+                g.setcell(pos[0] + dx, pos[1] + dy, 1)
+           
+     
+
+# ── main ───────────────────────────────────────────────────────────────────────
 def main():
     g.new("HELLO Ticker (looping)")
     g.setrule("B3/S23")
