@@ -284,42 +284,46 @@ def place_eat():
 
 # ── main ───────────────────────────────────────────────────────────────────────
 def main():
-    g.new("HELLO Ticker (looping)")
-    g.setrule("B3/S23")
-    g.autoupdate(True)      
-    tesxt_to_spawn = ""
-    if TEXT[0] != ' ':
-        text_to_spawn = ' ' + TEXT
+      g.new("HELLO Ticker (looping)")
+      g.setrule("B3/S23")
+      g.autoupdate(True)      
+      tesxt_to_spawn = ""
 
-    LETTER_WIDTH_CELLS = 4 * COL_SPACING + CHAR_GAP_CELLS
-    GENS_PER_LETTER    = LETTER_WIDTH_CELLS * 2   # cells * 2 gens/cell
+      TEXT = g.getstring("Enter Text for Banner:", "Hello World")
+      if TEXT[0] != ' ':
+            text_to_spawn = ' ' + TEXT
 
-    STEP = 4  
+      LETTER_WIDTH_CELLS = 4 * COL_SPACING + CHAR_GAP_CELLS
+      GENS_PER_LETTER    = LETTER_WIDTH_CELLS * 2   # cells * 2 gens/cell
 
-    letter_index = 0
+      place_eat()
 
-    g.show("Spawning '%s' on loop -- close the script window to stop." % text_to_spawn)
+      STEP = 4  
 
-    while True:
-        gen = g.getgen()
-        if int(gen) % 240 == 0 :
+      letter_index = 0
+
+      g.show("Spawning '%s' on loop -- close the script window to stop." % text_to_spawn)
+
+      while True:
+            gen = g.getgen()
+            if int(gen) % 240 == 0 :
+                  
+                  ch = text_to_spawn[letter_index % len(text_to_spawn)]
+                  spawn_letter(ch)
+                  g.fit()
+
+                  
+                  gens_run = 0
+                  while gens_run < GENS_PER_LETTER:
+                        g.run(STEP)
+                        gens_run += STEP
+                        g.show(
+                        "Letter %d/%d ('%s') -- generation %d -- running..."
+                        % (letter_index % len(text_to_spawn) + 1, len(text_to_spawn), ch, gens_run)
+                        )
+
+                  letter_index += 1
             
-            ch = text_to_spawn[letter_index % len(text_to_spawn)]
-            spawn_letter(ch)
-            g.fit()
-
-            
-            gens_run = 0
-            while gens_run < GENS_PER_LETTER:
-                  g.run(STEP)
-                  gens_run += STEP
-                  g.show(
-                  "Letter %d/%d ('%s') -- generation %d -- running..."
-                  % (letter_index % len(text_to_spawn) + 1, len(text_to_spawn), ch, gens_run)
-                  )
-
-            letter_index += 1
-      
             
        
 
